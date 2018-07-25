@@ -25,6 +25,7 @@
 					var remainDeck=deck.cards.filter(function(item,index,array){
 						return (item.place==true);
 					});
+					remainDeck.push(player.cards[0]);
 					
 					document.write("<p>电脑的手牌：*\t");
 					for(var j=1;j<computer.cards.length;j++)
@@ -37,7 +38,7 @@
 						document.write(player.cards[j].name+"\t");
 					}
 					document.write("<\p>");
-					if(computer.think(player.showScores,remainDeck,player.cards[0]))
+					if(computer.think(remainDeck))
 					{
 						computer.askOneCard(deck.outOneCard());
 						computerAsk=true;
@@ -48,7 +49,7 @@
 						document.write("<p>电脑没有要牌。<\p>");
 					}
 					document.write("<p>你是否要牌？<\p>"+"<a href='' onclick=want()>要牌</a>	<a href='' onclick=dontWant()>不要</a>");
-					if(computerAsk||playerAsk==false)
+					if(computerAsk==false)
 					{
 						break;
 					}

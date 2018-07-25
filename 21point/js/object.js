@@ -78,22 +78,23 @@ function Computer(){
 	this.ifAskOneCard=false;
 	if(typeof(this.think)!="function" )
 	{
-		Computer.prototype.think=function(ashowScores,decks,firstPlayer){
+		Computer.prototype.think=function(decks){
 			this.ifAskOneCard=false;
 			var that=this;
 			(function(){
 				var expecPoint=0;
-				var cExpecPoint=0;
 				for(var i=0;i<decks.length;i++)
 				{
-					expecPoint+=decks[i].number/decks.length;
+					if(decks[i].name=="Ace"&&that.scores<11)
+					{
+						expecPoint+=(decks[i].number+10)/decks.length;
+						
+					}
+					else{
+						expecPoint+=decks[i].number/decks.length;
+					}
 				}
-				for(i=0;i<deck.length;i++)
-				{
-					cExpecPoint+=decks[i].number/(decks.length+1);
-				}
-				cExpecPoint+=firstPlayer.number/(decks.length+1);
-				if ((that.scores+expecPoint)>=(ashowScores+cExpecPoint)&&(that.scores+expecPoint)<=21)
+				if ((that.scores+expecPoint)<=21)
 				{
 					that.ifAskOneCard=true;
 				}
