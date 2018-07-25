@@ -1,11 +1,68 @@
 function Person(){
 	this.cards=[]; 
 	this.scores=0;
+	this.aceIn=false;
+	this.aceAdd=false;
+	this.showScores=0;
 	if(typeof(this.askOneCard)!="function" )
 	{
 		Person.prototype.askOneCard=function(){
 			this.cards.push(arguments[0]);
-			this.scores +=arguments[0].number;
+			var that=this;
+			(function(){
+				that.scores=0;
+				for(var i=0;i<that.cards.length;i++)
+				{
+					that.scores+=that.cards[i].number;
+					if(that.cards[i].name=="Ace")
+					{
+						that.aceIn=true;
+					}
+				}
+			})();
+			if(this.aceIn==true)
+			{
+				if(this.scores<12&&this.aceAdd==false)
+				{
+					this.scores+=10;
+					this.aceAdd=true;
+				}
+				else if(this.scores>21&&this.aceAdd==true)
+				{
+					this.scores-=10;
+				}
+				this.aceAdd=false;
+				this.aceIn=false;
+			}
+			(function(){
+				that.showScores=0;
+				if(that.cards.length>1){
+				for(var i=1;i<that.cards.length;i++)
+				{
+					that.showScores+=that.cards[i].number;
+					if(that.cards[i].name=="Ace")
+					{
+						that.aceIn=true;
+					}
+				}
+				}
+			})();
+			if(this.aceIn==true)
+			{
+				if(this.showScores<12&&this.aceAdd==false)
+				{
+					this.showScores+=10;
+					this.aceAdd=true;
+				}
+				else if(this.showScores>21&&this.aceAdd==true)
+				{
+					this.showScores-=10;
+					this.aceAdd=false;
+				}
+				this.aceAdd=false;
+				this.aceIn=false;
+			}
+			
 		}
 	}
 }
@@ -18,13 +75,32 @@ Player.prototype.constructor=Player;
 
 function Computer(){
 	Person.call(this);
-//	if(typeof(this.think)!="function" )
-//	{
-//		Computer.prototype.think=function(){
-//			
-//		})
-//		}
-//	}
+	this.ifAskOneCard=false;
+	if(typeof(this.think)!="function" )
+	{
+		Computer.prototype.think=function(ashowScores,decks,firstPlayer){
+			this.ifAskOneCard=false;
+			var that=this;
+			(function(){
+				var expecPoint=0;
+				var cExpecPoint=0;
+				for(var i=0;i<decks.length;i++)
+				{
+					expecPoint+=decks[i].number/decks.length;
+				}
+				for(i=0;i<deck.length;i++)
+				{
+					cExpecPoint+=decks[i].number/(decks.length+1);
+				}
+				cExpecPoint+=firstPlayer.number/(decks.length+1);
+				if ((that.scores+expecPoint)>=(ashowScores+cExpecPoint)&&(that.scores+expecPoint)<=21)
+				{
+					that.ifAskOneCard=true;
+				}
+			})();
+			return this.ifAskOneCard;
+		}
+	}
 }
 Computer.prototype=new Person();
 Computer.prototype.constructor=Computer;
@@ -38,7 +114,7 @@ function Card(){
 function Deck(){
 	this.cards=[];
 	var that=this;
-	var cardsName=["Ace","1","2","3","4","5","6","7","8","9","10","Jack","Queen","King"];
+	var cardsName=["Ace","2","3","4","5","6","7","8","9","10","Jack","Queen","King"];
 	
 	(function () {
 		for(var i=0;i<13;i++)
@@ -69,5 +145,5 @@ function Deck(){
 	}
 }
 
-var player=new Player();
-var deck=new Deck();
+
+

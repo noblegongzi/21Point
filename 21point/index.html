@@ -3,9 +3,79 @@
 	<head>
 		<meta charset="utf-8" />
 		<title></title>
-		<script src="js/object.js" type="text/javascript" charset="utf-8" defer="defer"></script>
+		<script src="js/object.js" type="text/javascript" charset="utf-8" ></script>
 	</head>
 	<body>
-		
+		<script>
+			var player=new Player();
+			var deck=new Deck();
+			var computer=new Computer();
+			
+			
+			computer.askOneCard(deck.outOneCard());
+			player.askOneCard(deck.outOneCard());
+			computer.askOneCard(deck.outOneCard());
+			player.askOneCard(deck.outOneCard());
+			
+			(function () {
+				for(var i=0;i<6;i++)
+				{
+					var computerAsk=false;
+					var playerAsk=false;
+					var remainDeck=deck.cards.filter(function(item,index,array){
+						return (item.place==true);
+					});
+					
+					document.write("<p>电脑的手牌：*\t");
+					for(var j=1;j<computer.cards.length;j++)
+					{
+						document.write(computer.cards[j].name+"\t");
+					}
+					document.write("<\p><p>你的手牌：");
+					for(var j=0;j<player.cards.length;j++)
+					{
+						document.write(player.cards[j].name+"\t");
+					}
+					document.write("<\p>");
+					if(computer.think(player.showScores,remainDeck,player.cards[0]))
+					{
+						computer.askOneCard(deck.outOneCard());
+						computerAsk=true;
+						document.write("<p>电脑要了一张牌。"+computer.cards[computer.cards.length-1].name+"<\p>");
+					}
+					else
+					{
+						document.write("<p>电脑没有要牌。<\p>");
+					}
+					document.write("<p>你是否要牌？<\p>"+"<a href='' onclick=want()>要牌</a>	<a href='' onclick=dontWant()>不要</a>");
+					if(computerAsk||playerAsk==false)
+					{
+						break;
+					}
+				}
+				document.write("<p>电脑的手牌：");
+					for(var j=0;j<computer.cards.length;j++)
+					{
+						document.write(computer.cards[j].name+"\t");
+					}
+					document.write("<\p><p>你的手牌：");
+					for(var j=0;j<player.cards.length;j++)
+					{
+						document.write(player.cards[j].name+"\t");
+					}
+					document.write("<\p>");
+				if((computer.scores>21&&player.scores<=21)||(computer.scores<=21&&player.scores<=21&&computer.scores<player.scores))
+				{
+					document.write("<p>你赢了！<\p>");
+				}
+				else if((computer.scores>21&&player.scores>21)||(computer.scores<=21&&player.scores<=21&&computer.scores==player.scores))
+				{
+					document.write("<p>平局。<\p>");
+				}
+				else{
+					document.write("<p>你输了！<\p>");
+				}
+			})();
+		</script>
 	</body>
 </html>
