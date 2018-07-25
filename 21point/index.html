@@ -7,7 +7,7 @@
 	</head>
 	<body>
 		<script>
-			var player=new Player();
+			var player=new Computer();
 			var deck=new Deck();
 			var computer=new Computer();
 			
@@ -25,7 +25,9 @@
 					var remainDeck=deck.cards.filter(function(item,index,array){
 						return (item.place==true);
 					});
+					var pRemainDeck=remainDeck;
 					remainDeck.push(player.cards[0]);
+					pRemainDeck.push(computer.cards[0]);
 					
 					document.write("<p>电脑的手牌：*\t");
 					for(var j=1;j<computer.cards.length;j++)
@@ -48,8 +50,17 @@
 					{
 						document.write("<p>电脑没有要牌。<\p>");
 					}
-					document.write("<p>你是否要牌？<\p>"+"<a href='' onclick=want()>要牌</a>	<a href='' onclick=dontWant()>不要</a>");
-					if(computerAsk==false)
+					if(player.think(pRemainDeck))
+					{
+						player.askOneCard(deck.outOneCard());
+						playerAsk=true;
+						document.write("<p>玩家要了一张牌。"+player.cards[player.cards.length-1].name+"<\p>");
+					}
+					else
+					{
+						document.write("<p>玩家没有要牌。<\p>");
+					}
+					if(computerAsk==false&&playerAsk==false)
 					{
 						break;
 					}
